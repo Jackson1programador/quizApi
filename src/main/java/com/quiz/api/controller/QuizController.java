@@ -58,7 +58,7 @@ public class QuizController {
 	@PutMapping("/{quizId}")
 	public Quiz atualizar(@PathVariable Long quizId, @RequestBody Quiz quiz ){
 		Quiz quizAtualizado = cadastroQuiz.buscarOuFalhar(quizId);
-		BeanUtils.copyProperties(quiz, quizAtualizado, "id");
+		BeanUtils.copyProperties(quiz, quizAtualizado, "id", "dataCadastro");
 		return cadastroQuiz.salvar(quizAtualizado);
 		
 		

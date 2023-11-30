@@ -11,12 +11,14 @@ import org.springframework.stereotype.Service;
 
 import com.quiz.domain.exception.EntidadeEmUsoException;
 import com.quiz.domain.exception.EntidadeNãoEcontradaException;
+import com.quiz.domain.exception.QuizDificuldadeValoresNaoAceitoException;
 import com.quiz.domain.model.Quiz;
 import com.quiz.domain.repository.QuizRepository;
 
 @Service
 public class CadastroQuizService {
 	
+	private static final String MSG_QUIZ_DIFICULDADE_FORA_DO_INTERVALO = "Propriedade dificuldade com valores não permitidos. Valores permitidos são inteiros entre 1 e 5";
 	private static final String MSG_QUIZ_EM_USO = "A pergunta de código %d não pode ser removida, pois está em uso";
 	private static final String MSG_QUIZ_NAO_ENCONTRADA = "Não existe o cadastro da pergunta com esse código %d";
 	
@@ -37,7 +39,10 @@ public class CadastroQuizService {
 	
 	
 	public Quiz salvar (Quiz quiz) {
-		return quizRepository.save(quiz);
+		if(quiz.getDificuldade() > 0 && quiz.getDificuldade() < 6) {
+			return quizRepository.save(quiz);
+		} throw new QuizDificuldadeValoresNaoAceitoException(MSG_QUIZ_DIFICULDADE_FORA_DO_INTERVALO);
+		
 	}
 	
 	
