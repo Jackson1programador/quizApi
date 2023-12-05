@@ -1,8 +1,6 @@
 package com.quiz.domain.model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -14,27 +12,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import lombok.Data;
 
-@Data
 @Entity
-public class Categoria {
-	
+@Data
+public class AlternativaDaResposta {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false)
-	private String nome;
-	
-	private String descricao;
-
-	private String foto;
-	
-	@JsonIgnore
-	@OneToMany(mappedBy = "categoria")
-	private List<Quiz> perguntas = new ArrayList<>();
+	private String conteudo;
 	
 	@JsonIgnore
 	@CreationTimestamp

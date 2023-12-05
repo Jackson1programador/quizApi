@@ -1,7 +1,6 @@
 package com.quiz.domain.model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -34,9 +33,23 @@ public class Quiz {
 	
 	private String pergunta;
 	
-	private ArrayList<String> alternativas;
+	@ManyToOne
+	private AlternativaDaResposta alternativaA;
 	
-	private String respostaCerta;
+	@ManyToOne
+	private AlternativaDaResposta alternativaB;
+	
+	@ManyToOne
+	private AlternativaDaResposta alternativaC;
+	
+	@ManyToOne
+	private AlternativaDaResposta alternativaD;
+	
+	@ManyToOne
+	private AlternativaDaResposta alternativaE;
+	
+	@ManyToOne
+	private AlternativaDaResposta respostaCerta;
 	
 	@JsonIgnore
 	@CreationTimestamp
