@@ -34,31 +34,37 @@ public class Quiz {
 	private String pergunta;
 	
 	@ManyToOne
+	@JoinColumn(name = "alternativa_id_a")
 	private AlternativaDaResposta alternativaA;
 	
 	@ManyToOne
+	@JoinColumn(name = "alternativa_id_b")
 	private AlternativaDaResposta alternativaB;
 	
 	@ManyToOne
+	@JoinColumn(name = "alternativa_id_c")
 	private AlternativaDaResposta alternativaC;
 	
 	@ManyToOne
+	@JoinColumn(name = "alternativa_id_d")
 	private AlternativaDaResposta alternativaD;
 	
 	@ManyToOne
+	@JoinColumn(name = "alternativa_id_e")
 	private AlternativaDaResposta alternativaE;
 	
 	@ManyToOne
+	@JoinColumn(name = "resposta_certa_id")
 	private AlternativaDaResposta respostaCerta;
 	
 	@JsonIgnore
 	@CreationTimestamp
-	@Column(nullable = false, columnDefinition = "datetime")
+	@Column(name = "data_cadastro", columnDefinition = "datetime")
 	private LocalDateTime dataCadastro;
 	
 	@JsonIgnore
 	@UpdateTimestamp
-	@Column(nullable = false, columnDefinition = "datetime")
+	@Column(name = "data_atualizacao", columnDefinition = "datetime")
 	private LocalDateTime dataAtualizaçao;
 	
 }
