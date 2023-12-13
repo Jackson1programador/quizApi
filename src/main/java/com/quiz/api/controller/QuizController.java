@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.quiz.domain.exception.AlternativaDaRespostaNãoEcontradaException;
+import com.quiz.domain.exception.CategoriaNãoEcontradaException;
+import com.quiz.domain.exception.EntidadeNãoEcontradaException;
+import com.quiz.domain.exception.NegocioException;
 import com.quiz.domain.model.Quiz;
 import com.quiz.domain.service.CadastroQuizService;
 
@@ -43,7 +47,12 @@ public class QuizController {
 	@PostMapping()
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public Quiz incluir( @RequestBody Quiz quiz) {
-		return cadastroQuiz.salvar(quiz);
+		try {
+			return cadastroQuiz.salvar(quiz);
+		} catch (EntidadeNãoEcontradaException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
+		
 	}
 	
 	
@@ -58,11 +67,16 @@ public class QuizController {
 	@PutMapping("/{quizId}")
 	public Quiz atualizar(@PathVariable Long quizId, @RequestBody Quiz quiz ){
 		Quiz quizAtualizado = cadastroQuiz.buscarOuFalhar(quizId);
-		BeanUtils.copyProperties(quiz, quizAtualizado, "id", "dataCadastro");
-		return cadastroQuiz.salvar(quizAtualizado);
-		
-		
+		try {
+			BeanUtils.copyProperties(quiz, quizAtualizado, "id", "dataCadastro");
+			return cadastroQuiz.salvar(quizAtualizado);
+		} catch (CategoriaNãoEcontradaException e) {
+			throw new NegocioException(e.getMessage(), e);
+		} catch (AlternativaDaRespostaNãoEcontradaException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
 	}	
 	
+
 }
 	

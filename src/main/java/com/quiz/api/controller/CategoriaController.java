@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.quiz.domain.model.Categoria;
 import com.quiz.domain.service.CadastroCategoriaService;
 
@@ -42,7 +43,7 @@ public class CategoriaController {
 	@PostMapping()
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public Categoria incluir( @RequestBody Categoria categoria) {
-		return cadastroCategoria.salvar(categoria);
+		return cadastroCategoria.salvar(categoria);	
 	}
 	
 	
@@ -60,6 +61,9 @@ public class CategoriaController {
 		BeanUtils.copyProperties(categoria, categoriaAtualizado, "id", "dataCadastro");
 		return cadastroCategoria.salvar(categoriaAtualizado);
 	}	
+	
+	
+	
 	
 	
 

@@ -4,19 +4,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class NegocioException extends RuntimeException {
+public class CategoriaNãoEcontradaException extends EntidadeNãoEcontradaException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public NegocioException(String mensagem) {
+	public CategoriaNãoEcontradaException(String mensagem) {
 		super(mensagem);
-	}
-	
-	public NegocioException(String mensagem, Throwable causa) {
-		super(mensagem, causa);
 	}
 
 }

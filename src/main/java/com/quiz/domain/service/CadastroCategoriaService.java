@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.quiz.domain.exception.CategoriaNãoEcontradaException;
 import com.quiz.domain.exception.EntidadeEmUsoException;
-import com.quiz.domain.exception.EntidadeNãoEcontradaException;
 import com.quiz.domain.model.Categoria;
 import com.quiz.domain.repository.CategoriaRepository;
 
@@ -41,7 +41,7 @@ public class CadastroCategoriaService {
 	public void excluir (Long categoriaId) {
 		try {
 			if (!categoriaRepository.existsById(categoriaId)) {
-				throw new EntidadeNãoEcontradaException(
+				throw new CategoriaNãoEcontradaException(
 						String.format(MSG_CATEGORIA_NAO_ENCONTRADA, categoriaId));
 			}
 			categoriaRepository.deleteById(categoriaId);
@@ -63,7 +63,7 @@ public class CadastroCategoriaService {
 	}	
 	
 	public Categoria buscarOuFalhar(Long categoriaId) {
-		return buscaPorId(categoriaId).orElseThrow(() -> new EntidadeNãoEcontradaException(String.format(MSG_CATEGORIA_NAO_ENCONTRADA, categoriaId)));
+		return buscaPorId(categoriaId).orElseThrow(() -> new CategoriaNãoEcontradaException(String.format(MSG_CATEGORIA_NAO_ENCONTRADA, categoriaId)));
 	}
 	
 	

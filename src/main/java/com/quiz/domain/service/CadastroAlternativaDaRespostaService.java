@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.quiz.domain.exception.AlternativaDaRespostaNãoEcontradaException;
 import com.quiz.domain.exception.EntidadeEmUsoException;
-import com.quiz.domain.exception.EntidadeNãoEcontradaException;
 import com.quiz.domain.model.AlternativaDaResposta;
 import com.quiz.domain.model.Categoria;
 import com.quiz.domain.repository.AlternativaDaRespostaRepository;
@@ -42,7 +42,7 @@ public class CadastroAlternativaDaRespostaService {
 	public void excluir (Long alternativaDaRespostaId) {
 		try {
 			if (!alternativaDaRespostaRepository.existsById(alternativaDaRespostaId)) {
-				throw new EntidadeNãoEcontradaException(
+				throw new AlternativaDaRespostaNãoEcontradaException(
 						String.format(MSG_ALTERNATIVA_NAO_ENCONTRADA, alternativaDaRespostaId));
 			}
 			alternativaDaRespostaRepository.deleteById(alternativaDaRespostaId);
@@ -64,6 +64,6 @@ public class CadastroAlternativaDaRespostaService {
 	}	
 	
 	public AlternativaDaResposta buscarOuFalhar(Long alternativaDaRespostaId) {
-		return buscaPorId(alternativaDaRespostaId).orElseThrow(() -> new EntidadeNãoEcontradaException(String.format(MSG_ALTERNATIVA_NAO_ENCONTRADA, alternativaDaRespostaId)));
+		return buscaPorId(alternativaDaRespostaId).orElseThrow(() -> new AlternativaDaRespostaNãoEcontradaException(String.format(MSG_ALTERNATIVA_NAO_ENCONTRADA, alternativaDaRespostaId)));
 	}
 }

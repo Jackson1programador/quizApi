@@ -14,6 +14,8 @@ import com.quiz.domain.exception.EntidadeNãoEcontradaException;
 import com.quiz.domain.exception.QuizAlternativaIguaisException;
 import com.quiz.domain.exception.QuizDificuldadeValoresNaoAceitoException;
 import com.quiz.domain.exception.QuizSemRespostaCertaException;
+import com.quiz.domain.model.AlternativaDaResposta;
+import com.quiz.domain.model.Categoria;
 import com.quiz.domain.model.Quiz;
 import com.quiz.domain.repository.QuizRepository;
 
@@ -29,6 +31,12 @@ public class CadastroQuizService {
 	@Autowired
 	private QuizRepository quizRepository;
 	
+	@Autowired
+	private CadastroCategoriaService categoriaService;
+	
+	@Autowired
+	private CadastroAlternativaDaRespostaService alternativaDaRespostaService;
+	
 	
 	public List<Quiz> list () {
 		List<Quiz> list = quizRepository.findAll();
@@ -43,6 +51,34 @@ public class CadastroQuizService {
 	
 	
 	public Quiz salvar (Quiz quiz) {
+		Long categoriaId = quiz.getCategoria().getId();
+		Categoria categoria = categoriaService.buscarOuFalhar(categoriaId);
+		quiz.setCategoria(categoria);
+		
+		Long respostaAId = quiz.getAlternativaA().getId();
+		AlternativaDaResposta respostaA = alternativaDaRespostaService.buscarOuFalhar(respostaAId);
+		quiz.setAlternativaA(respostaA);
+		
+		Long respostaBId = quiz.getAlternativaB().getId();
+		AlternativaDaResposta respostaB = alternativaDaRespostaService.buscarOuFalhar(respostaBId);
+		quiz.setAlternativaB(respostaB);
+
+		Long respostaCId = quiz.getAlternativaC().getId();
+		AlternativaDaResposta respostaC = alternativaDaRespostaService.buscarOuFalhar(respostaCId);
+		quiz.setAlternativaC(respostaC);
+		
+		Long respostaDId = quiz.getAlternativaD().getId();
+		AlternativaDaResposta respostaD = alternativaDaRespostaService.buscarOuFalhar(respostaDId);
+		quiz.setAlternativaD(respostaD);
+		
+		Long respostaEId = quiz.getAlternativaE().getId();
+		AlternativaDaResposta respostaE = alternativaDaRespostaService.buscarOuFalhar(respostaEId);
+		quiz.setAlternativaE(respostaE);
+		
+		Long respostaCertaId = quiz.getRespostaCerta().getId();
+		AlternativaDaResposta respostaCerta = alternativaDaRespostaService.buscarOuFalhar(respostaCertaId);
+		quiz.setRespostaCerta(respostaCerta);
+		
 		if(quiz.getDificuldade() > 0 && quiz.getDificuldade() < 6) {
 			if(					
 				quiz.getRespostaCerta().equals(quiz.getAlternativaA()) ||
