@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quiz.domain.exception.AlternativaDaRespostaNãoEcontradaException;
+import com.quiz.domain.exception.AlternativaDaRespostaNãoEcontradaNoCorpoDaRequisiçãoDoQuizException;
 import com.quiz.domain.exception.CategoriaNãoEcontradaException;
-import com.quiz.domain.exception.EntidadeNãoEcontradaException;
-import com.quiz.domain.exception.NegocioException;
+import com.quiz.domain.exception.CategoriaNãoEcontradaNoCorpoDaRequisiçãoDoQuizException;
 import com.quiz.domain.model.Quiz;
 import com.quiz.domain.service.CadastroQuizService;
 
@@ -49,8 +49,10 @@ public class QuizController {
 	public Quiz incluir( @RequestBody Quiz quiz) {
 		try {
 			return cadastroQuiz.salvar(quiz);
-		} catch (EntidadeNãoEcontradaException e) {
-			throw new NegocioException(e.getMessage(), e);
+		} catch (CategoriaNãoEcontradaException e) {
+			throw new CategoriaNãoEcontradaNoCorpoDaRequisiçãoDoQuizException(e.getMessage(), e);
+		} catch (AlternativaDaRespostaNãoEcontradaException e) {
+			throw new AlternativaDaRespostaNãoEcontradaNoCorpoDaRequisiçãoDoQuizException(e.getMessage(), e);
 		}
 		
 	}
@@ -71,9 +73,9 @@ public class QuizController {
 			BeanUtils.copyProperties(quiz, quizAtualizado, "id", "dataCadastro");
 			return cadastroQuiz.salvar(quizAtualizado);
 		} catch (CategoriaNãoEcontradaException e) {
-			throw new NegocioException(e.getMessage(), e);
+			throw new CategoriaNãoEcontradaNoCorpoDaRequisiçãoDoQuizException(e.getMessage(), e);
 		} catch (AlternativaDaRespostaNãoEcontradaException e) {
-			throw new NegocioException(e.getMessage(), e);
+			throw new AlternativaDaRespostaNãoEcontradaNoCorpoDaRequisiçãoDoQuizException(e.getMessage(), e);
 		}
 	}	
 	
