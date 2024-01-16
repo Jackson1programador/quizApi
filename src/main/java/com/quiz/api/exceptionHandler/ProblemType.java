@@ -9,6 +9,7 @@ public enum ProblemType {
 	ENTIDADE_EM_USO("/entidade-em-uso", "Entidade em uso"),
 	ERRO_NEGOCIO("/erro-negocio", "Erro de negócio"),
 	ALTERNATIVAS_IGUAIS("/alternativas-iguais", "Alternativas iguais"),
+	DADOS_INVALIDOS("/dados-inválidos", "Dados Inválidos"),
 	SEM_RESPOSTA_CERTA("/quiz-sem-resposta-certa", "A quiz não possui uma resposta certa"),
 	DIFICULDADE_NAO_ACEITA("/dificuldade-não-está-no-intervalo-de-1-a-5-ou-não-é-número-inteiro", "O valor dificuldade não está dentro do intervalo de 1 a 5 ou não é número inteiro"),
 	CATEGORIA_NAO_ENCONTRADA("/categoria-não-encontrada-no-banco-de-dados", "Categoria não encontrada no banco de dados"),

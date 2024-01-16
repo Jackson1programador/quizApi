@@ -22,6 +22,8 @@ import com.quiz.domain.exception.CategoriaNãoEcontradaNoCorpoDaRequisiçãoDoQu
 import com.quiz.domain.model.Quiz;
 import com.quiz.domain.service.CadastroQuizService;
 
+import jakarta.validation.Valid;
+
 
 @RestController
 @RequestMapping("/quiz")
@@ -46,7 +48,7 @@ public class QuizController {
 	
 	@PostMapping()
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public Quiz incluir( @RequestBody Quiz quiz) {
+	public Quiz incluir( @RequestBody @Valid Quiz quiz) {
 		try {
 			return cadastroQuiz.salvar(quiz);
 		} catch (CategoriaNãoEcontradaException e) {
@@ -67,7 +69,7 @@ public class QuizController {
 	
 	
 	@PutMapping("/{quizId}")
-	public Quiz atualizar(@PathVariable Long quizId, @RequestBody Quiz quiz ){
+	public Quiz atualizar(@PathVariable Long quizId, @RequestBody @Valid Quiz quiz ){
 		Quiz quizAtualizado = cadastroQuiz.buscarOuFalhar(quizId);
 		try {
 			BeanUtils.copyProperties(quiz, quizAtualizado, "id", "dataCadastro");

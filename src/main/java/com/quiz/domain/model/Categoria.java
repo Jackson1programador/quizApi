@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.quiz.Groups;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,19 +16,24 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 @Entity
 public class Categoria {
-	
+
+	@NotNull(groups = Groups.CategoriaId.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank
 	@Column(nullable = false)
 	private String nome;
 	
+	@NotBlank
 	private String descricao;
 
 	private String foto;

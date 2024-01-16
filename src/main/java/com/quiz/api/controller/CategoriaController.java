@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.quiz.domain.model.Categoria;
 import com.quiz.domain.service.CadastroCategoriaService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/categoria")
 public class CategoriaController {
@@ -42,7 +44,7 @@ public class CategoriaController {
 	
 	@PostMapping()
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public Categoria incluir( @RequestBody Categoria categoria) {
+	public Categoria incluir( @RequestBody @Valid Categoria categoria) {
 		return cadastroCategoria.salvar(categoria);	
 	}
 	
@@ -56,7 +58,7 @@ public class CategoriaController {
 	
 	
 	@PutMapping("/{categoriaId}")
-	public Categoria atualizar(@PathVariable Long categoriaId, @RequestBody Categoria categoria ){
+	public Categoria atualizar(@PathVariable Long categoriaId, @RequestBody @Valid Categoria categoria ){
 		Categoria categoriaAtualizado = cadastroCategoria.buscarOuFalhar(categoriaId);
 		BeanUtils.copyProperties(categoria, categoriaAtualizado, "id", "dataCadastro");
 		return cadastroCategoria.salvar(categoriaAtualizado);

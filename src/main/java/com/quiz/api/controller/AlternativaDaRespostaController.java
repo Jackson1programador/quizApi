@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.quiz.domain.model.AlternativaDaResposta;
 import com.quiz.domain.service.CadastroAlternativaDaRespostaService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/alternativaDaResposta")
 public class AlternativaDaRespostaController {
@@ -41,7 +43,7 @@ public class AlternativaDaRespostaController {
 	
 	@PostMapping()
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public AlternativaDaResposta incluir( @RequestBody AlternativaDaResposta alternativaDaResposta) {
+	public AlternativaDaResposta incluir( @RequestBody @Valid AlternativaDaResposta alternativaDaResposta) {
 		return cadastroAlternativaDaResposta.salvar(alternativaDaResposta);
 	}
 	
@@ -55,7 +57,7 @@ public class AlternativaDaRespostaController {
 	
 	
 	@PutMapping("/{alternativaDaRespostaId}")
-	public AlternativaDaResposta atualizar(@PathVariable Long alternativaDaRespostaId, @RequestBody AlternativaDaResposta 	alternativaDaResposta ){
+	public AlternativaDaResposta atualizar(@PathVariable Long alternativaDaRespostaId, @RequestBody @Valid AlternativaDaResposta 	alternativaDaResposta ){
 		AlternativaDaResposta alternativaDaRespostaAtualizado = cadastroAlternativaDaResposta.buscarOuFalhar(alternativaDaRespostaId);
 		BeanUtils.copyProperties(alternativaDaResposta, alternativaDaRespostaAtualizado, "id", "dataCadastro");
 		return cadastroAlternativaDaResposta.salvar(alternativaDaRespostaAtualizado);
