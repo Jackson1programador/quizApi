@@ -2,7 +2,6 @@ package com.quiz.api.controller;
 
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.quiz.api.assembler.CategoriaModelAssembler;
+import com.quiz.api.assembler.CategoriaModelDesassembler;
+import com.quiz.api.model.CategoriaDTO;
+import com.quiz.api.model.input.CategoriaInputDTO;
 import com.quiz.domain.model.Categoria;
 import com.quiz.domain.service.CadastroCategoriaService;
 
@@ -28,24 +30,33 @@ public class CategoriaController {
 	@Autowired
 	private CadastroCategoriaService cadastroCategoria;
 	
+	@Autowired
+	private CategoriaModelAssembler categoriaModelAssembler;
+	
+	@Autowired
+	private CategoriaModelDesassembler categoriaModelDesassembler;
 	
 	@GetMapping()
-	public List<Categoria> list() {
-		List<Categoria> list = cadastroCategoria.list();
+	public List<CategoriaDTO> list() {
+		List<CategoriaDTO> list = categoriaModelAssembler.toCollectionModel(cadastroCategoria.list()); 
 		return list;
 	}
 	
 	
 	@GetMapping("/{categoriaId}")
-	public Categoria buscaPorId( @PathVariable Long categoriaId) {
-		return cadastroCategoria.buscarOuFalhar(categoriaId);
+	public CategoriaDTO buscaPorId( @PathVariable Long categoriaId) {
+		Categoria categoria = cadastroCategoria.buscarOuFalhar(categoriaId);
+		CategoriaDTO categoriaDTO = new CategoriaDTO();
+		categoriaDTO = categoriaModelAssembler.toModel(categoria);
+		return categoriaDTO;
 	}
 	
 	
 	@PostMapping()
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public Categoria incluir( @RequestBody @Valid Categoria categoria) {
-		return cadastroCategoria.salvar(categoria);	
+	public CategoriaDTO incluir( @RequestBody @Valid CategoriaInputDTO categoriaInputDTO) {
+		Categoria categoria = categoriaModelDesassembler.toDomainObject(categoriaInputDTO);
+		return categoriaModelAssembler.toModel(cadastroCategoria.salvar(categoria));
 	}
 	
 	
@@ -56,17 +67,16 @@ public class CategoriaController {
 		
 	}
 	
-	
 	@PutMapping("/{categoriaId}")
-	public Categoria atualizar(@PathVariable Long categoriaId, @RequestBody @Valid Categoria categoria ){
+	public CategoriaDTO atualizar(@PathVariable Long categoriaId, @RequestBody @Valid CategoriaInputDTO categoriaDTO ){
 		Categoria categoriaAtualizado = cadastroCategoria.buscarOuFalhar(categoriaId);
-		BeanUtils.copyProperties(categoria, categoriaAtualizado, "id", "dataCadastro");
-		return cadastroCategoria.salvar(categoriaAtualizado);
+		// {
+		//Categoria categoria = categoriaModelDesassembler.toDomainObject(categoriaDTO);
+		//BeanUtils.copyProperties(categoria, categoriaAtualizado, "id", "dataCadastro");
+		categoriaModelDesassembler.copyToDomainObject(categoriaDTO, categoriaAtualizado);
+		// }
+		return categoriaModelAssembler.toModel(cadastroCategoria.salvar(categoriaAtualizado));
 	}	
 	
 	
-	
-	
-	
-
 }

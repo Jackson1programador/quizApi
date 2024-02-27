@@ -2,7 +2,6 @@ package com.quiz.api.controller;
 
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.quiz.api.assembler.QuizModelAssembler;
+import com.quiz.api.assembler.QuizModelDesassembler;
+import com.quiz.api.model.QuizDTO;
+import com.quiz.api.model.QuizSemRespostaCertaDTO;
+import com.quiz.api.model.QuizSomenteRespostaCertaDTO;
+import com.quiz.api.model.input.QuizInputDTO;
 import com.quiz.domain.exception.AlternativaDaRespostaNãoEcontradaException;
 import com.quiz.domain.exception.AlternativaDaRespostaNãoEcontradaNoCorpoDaRequisiçãoDoQuizException;
 import com.quiz.domain.exception.CategoriaNãoEcontradaException;
@@ -32,25 +37,31 @@ public class QuizController {
 	@Autowired
 	private CadastroQuizService cadastroQuiz;
 	
+	@Autowired
+	private QuizModelAssembler quizModelAssembler;
+	
+	@Autowired
+	private QuizModelDesassembler quizModelDesassembler;
 	
 	@GetMapping()
-	public List<Quiz> list() {
-		List<Quiz> list = cadastroQuiz.list();
+	public List<QuizDTO> list() {
+		List<QuizDTO> list = quizModelAssembler.toCollectionModel(cadastroQuiz.list()) ;
 		return list;
 	}
 	
 	
 	@GetMapping("/{quizId}")
-	public Quiz buscaPorId( @PathVariable Long quizId) {
-		return cadastroQuiz.buscarOuFalhar(quizId);
+	public QuizDTO buscaPorId( @PathVariable Long quizId) {
+		return quizModelAssembler.toModel(cadastroQuiz.buscarOuFalhar(quizId));
 	}
 	
 	
 	@PostMapping()
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public Quiz incluir( @RequestBody @Valid Quiz quiz) {
+	public QuizDTO incluir( @RequestBody @Valid QuizInputDTO quizInputDTO) {
 		try {
-			return cadastroQuiz.salvar(quiz);
+			Quiz quiz = quizModelDesassembler.toDomainObject(quizInputDTO);
+			return quizModelAssembler.toModel(cadastroQuiz.salvar(quiz));
 		} catch (CategoriaNãoEcontradaException e) {
 			throw new CategoriaNãoEcontradaNoCorpoDaRequisiçãoDoQuizException(e.getMessage(), e);
 		} catch (AlternativaDaRespostaNãoEcontradaException e) {
@@ -69,11 +80,12 @@ public class QuizController {
 	
 	
 	@PutMapping("/{quizId}")
-	public Quiz atualizar(@PathVariable Long quizId, @RequestBody @Valid Quiz quiz ){
-		Quiz quizAtualizado = cadastroQuiz.buscarOuFalhar(quizId);
+	public QuizDTO atualizar(@PathVariable Long quizId, @RequestBody @Valid QuizInputDTO quizInputDTO ){
+		
 		try {
-			BeanUtils.copyProperties(quiz, quizAtualizado, "id", "dataCadastro");
-			return cadastroQuiz.salvar(quizAtualizado);
+			Quiz quizAtualizado = cadastroQuiz.buscarOuFalhar(quizId);
+			quizModelDesassembler.copyToDomainObject(quizInputDTO, quizAtualizado);
+			return quizModelAssembler.toModel(cadastroQuiz.salvar(quizAtualizado));
 		} catch (CategoriaNãoEcontradaException e) {
 			throw new CategoriaNãoEcontradaNoCorpoDaRequisiçãoDoQuizException(e.getMessage(), e);
 		} catch (AlternativaDaRespostaNãoEcontradaException e) {
@@ -82,5 +94,14 @@ public class QuizController {
 	}	
 	
 
+	@GetMapping("/{quizId}/sem-resposta-certa")
+	public QuizSemRespostaCertaDTO buscaPorIdSemRespostaCerta( @PathVariable Long quizId) {
+		return quizModelAssembler.toModelSemRespostaCerta(cadastroQuiz.buscarOuFalhar(quizId));
+	}
+
+	@GetMapping("/{quizId}/somente-resposta-certa")
+	public QuizSomenteRespostaCertaDTO buscaPorIdSomenteRespostaCerta( @PathVariable Long quizId) {
+		return quizModelAssembler.toModelSomenteRespostaCerta(cadastroQuiz.buscarOuFalhar(quizId));
+	}
 }
 	

@@ -2,7 +2,6 @@ package com.quiz.api.controller;
 
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.quiz.api.assembler.AlternativaDaRespostaModelAssembler;
+import com.quiz.api.assembler.AlternativaDaRespostaModelDesassembler;
+import com.quiz.api.model.AlternativaDaRespostaDTO;
+import com.quiz.api.model.input.AlternativaDaRespostaInputDTO;
 import com.quiz.domain.model.AlternativaDaResposta;
 import com.quiz.domain.service.CadastroAlternativaDaRespostaService;
 
@@ -27,6 +30,12 @@ public class AlternativaDaRespostaController {
 	@Autowired
 	private CadastroAlternativaDaRespostaService cadastroAlternativaDaResposta;
 	
+	@Autowired
+	private AlternativaDaRespostaModelAssembler alternativaDaRespostaModelAssembler;
+	
+	@Autowired
+	private AlternativaDaRespostaModelDesassembler alternativaDaRespostaModelDesassembler;
+	
 	
 	@GetMapping()
 	public List<AlternativaDaResposta> list() {
@@ -36,15 +45,21 @@ public class AlternativaDaRespostaController {
 	
 	
 	@GetMapping("/{alternativaDaRespostaId}")
-	public AlternativaDaResposta buscaPorId( @PathVariable Long alternativaDaRespostaId) {
-		return cadastroAlternativaDaResposta.buscarOuFalhar(alternativaDaRespostaId);
+	public AlternativaDaRespostaDTO buscaPorId( @PathVariable Long alternativaDaRespostaId) {
+		AlternativaDaResposta alternativaDaResposta = cadastroAlternativaDaResposta.buscarOuFalhar(alternativaDaRespostaId);
+		AlternativaDaRespostaDTO alternativaDaRespostaDTO = alternativaDaRespostaModelAssembler.toModel(alternativaDaResposta);
+		return alternativaDaRespostaDTO;
 	}
+	//public AlternativaDaResposta buscaPorId( @PathVariable Long alternativaDaRespostaId) {
+	//	return cadastroAlternativaDaResposta.buscarOuFalhar(alternativaDaRespostaId);
+	//}
 	
 	
 	@PostMapping()
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public AlternativaDaResposta incluir( @RequestBody @Valid AlternativaDaResposta alternativaDaResposta) {
-		return cadastroAlternativaDaResposta.salvar(alternativaDaResposta);
+	public AlternativaDaRespostaDTO incluir( @RequestBody @Valid AlternativaDaRespostaInputDTO alternativaDaRespostaInputDTO) {
+		AlternativaDaResposta alternativaDaResposta = alternativaDaRespostaModelDesassembler.toDomainObject(alternativaDaRespostaInputDTO);
+		return alternativaDaRespostaModelAssembler.toModel(cadastroAlternativaDaResposta.salvar(alternativaDaResposta));
 	}
 	
 	
@@ -57,10 +72,10 @@ public class AlternativaDaRespostaController {
 	
 	
 	@PutMapping("/{alternativaDaRespostaId}")
-	public AlternativaDaResposta atualizar(@PathVariable Long alternativaDaRespostaId, @RequestBody @Valid AlternativaDaResposta 	alternativaDaResposta ){
+	public AlternativaDaRespostaDTO atualizar(@PathVariable Long alternativaDaRespostaId, @RequestBody @Valid AlternativaDaRespostaInputDTO	alternativaDaRespostaInputDTO ){
 		AlternativaDaResposta alternativaDaRespostaAtualizado = cadastroAlternativaDaResposta.buscarOuFalhar(alternativaDaRespostaId);
-		BeanUtils.copyProperties(alternativaDaResposta, alternativaDaRespostaAtualizado, "id", "dataCadastro");
-		return cadastroAlternativaDaResposta.salvar(alternativaDaRespostaAtualizado);
+		alternativaDaRespostaModelDesassembler.copyToDomainObject(alternativaDaRespostaInputDTO, alternativaDaRespostaAtualizado);
+		return alternativaDaRespostaModelAssembler.toModel(cadastroAlternativaDaResposta.salvar(alternativaDaRespostaAtualizado));
 	}	
 
 }
