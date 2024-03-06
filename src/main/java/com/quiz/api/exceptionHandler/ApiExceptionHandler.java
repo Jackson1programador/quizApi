@@ -27,6 +27,7 @@ import com.quiz.domain.exception.CategoriaNãoEcontradaNoCorpoDaRequisiçãoDoQu
 import com.quiz.domain.exception.EntidadeEmUsoException;
 import com.quiz.domain.exception.EntidadeNãoEcontradaException;
 import com.quiz.domain.exception.NegocioException;
+import com.quiz.domain.exception.PermissaoNaoEncontradaException;
 import com.quiz.domain.exception.QuizAlternativaIguaisException;
 import com.quiz.domain.exception.QuizDificuldadeValoresNaoAceitoException;
 import com.quiz.domain.exception.QuizSemRespostaCertaException;
@@ -108,6 +109,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		HttpStatus status = HttpStatus.NOT_FOUND;
 		String detail = e.getMessage();
 		ProblemType problemType = ProblemType.CATEGORIA_NAO_ENCONTRADA;
+		Problem problem = createProblemBuilder(status, problemType, detail).build();		
+		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);		
+	}
+	
+	@ExceptionHandler(PermissaoNaoEncontradaException.class)
+	public ResponseEntity<?> handlerPermissaoNãoEcontradaException(
+			PermissaoNaoEncontradaException e, WebRequest request){
+		
+		HttpStatus status = HttpStatus.NOT_FOUND;
+		String detail = e.getMessage();
+		ProblemType problemType = ProblemType.PERMISSAO_NAO_ENCONTRADA;
 		Problem problem = createProblemBuilder(status, problemType, detail).build();		
 		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);		
 	}

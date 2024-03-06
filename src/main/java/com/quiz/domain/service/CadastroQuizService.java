@@ -7,7 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import com.quiz.domain.exception.EntidadeEmUsoException;
 import com.quiz.domain.exception.EntidadeNãoEcontradaException;
@@ -49,7 +49,7 @@ public class CadastroQuizService {
 		return quiz;	
 	}
 	
-	
+	@Transactional
 	public Quiz salvar (Quiz quiz) {
 		Long categoriaId = quiz.getCategoria().getId();
 		Categoria categoria = categoriaService.buscarOuFalhar(categoriaId);
@@ -106,7 +106,7 @@ public class CadastroQuizService {
 		} throw new QuizDificuldadeValoresNaoAceitoException(MSG_QUIZ_DIFICULDADE_FORA_DO_INTERVALO);
 	}
 	
-	
+	@Transactional
 	public void excluir (Long quizId) {
 		try {
 			if (!quizRepository.existsById(quizId)) {
@@ -114,6 +114,7 @@ public class CadastroQuizService {
 						String.format(MSG_QUIZ_NAO_ENCONTRADA, quizId));
 			}
 			quizRepository.deleteById(quizId);
+			quizRepository.flush();
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(
 			String.format(MSG_QUIZ_EM_USO, quizId));

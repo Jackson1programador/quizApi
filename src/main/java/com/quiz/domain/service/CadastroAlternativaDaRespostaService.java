@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.quiz.domain.exception.AlternativaDaRespostaNãoEcontradaException;
 import com.quiz.domain.exception.EntidadeEmUsoException;
@@ -33,12 +34,12 @@ public class CadastroAlternativaDaRespostaService {
 		return alternativaDaResposta;
 	}
 	
-	
+	@Transactional
 	public AlternativaDaResposta salvar (AlternativaDaResposta alternativaDaResposta) {
 		return alternativaDaRespostaRepository.save(alternativaDaResposta);
 	}
 	
-	
+	@Transactional
 	public void excluir (Long alternativaDaRespostaId) {
 		try {
 			if (!alternativaDaRespostaRepository.existsById(alternativaDaRespostaId)) {
@@ -46,6 +47,7 @@ public class CadastroAlternativaDaRespostaService {
 						String.format(MSG_ALTERNATIVA_NAO_ENCONTRADA, alternativaDaRespostaId));
 			}
 			alternativaDaRespostaRepository.deleteById(alternativaDaRespostaId);
+			alternativaDaRespostaRepository.flush();
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(
 			String.format(MSG_ALTERNATIVA_EM_USO, alternativaDaRespostaId));

@@ -1,0 +1,5 @@
+CREATE TABLE Permissao (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100),
+    descricao VARCHAR(1000)
+);

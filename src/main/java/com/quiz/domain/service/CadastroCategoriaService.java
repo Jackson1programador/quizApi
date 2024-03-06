@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.quiz.domain.exception.CategoriaNãoEcontradaException;
 import com.quiz.domain.exception.EntidadeEmUsoException;
@@ -32,12 +33,12 @@ public class CadastroCategoriaService {
 		return categoria;
 	}
 	
-	
+	@Transactional
 	public Categoria salvar (Categoria categoria) {
 		return categoriaRepository.save(categoria);
 	}
 	
-	
+	@Transactional
 	public void excluir (Long categoriaId) {
 		try {
 			if (!categoriaRepository.existsById(categoriaId)) {
@@ -45,6 +46,7 @@ public class CadastroCategoriaService {
 						String.format(MSG_CATEGORIA_NAO_ENCONTRADA, categoriaId));
 			}
 			categoriaRepository.deleteById(categoriaId);
+			categoriaRepository.flush();
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(
 			String.format(MSG_CATEGORIA_EM_USO, categoriaId));

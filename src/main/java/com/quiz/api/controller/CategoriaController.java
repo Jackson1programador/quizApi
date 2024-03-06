@@ -64,7 +64,6 @@ public class CategoriaController {
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void deletar( @PathVariable Long categoriaId) {
 			cadastroCategoria.excluir(categoriaId);
-		
 	}
 	
 	@PutMapping("/{categoriaId}")
