@@ -26,11 +26,13 @@ import com.quiz.domain.exception.CategoriaNãoEcontradaException;
 import com.quiz.domain.exception.CategoriaNãoEcontradaNoCorpoDaRequisiçãoDoQuizException;
 import com.quiz.domain.exception.EntidadeEmUsoException;
 import com.quiz.domain.exception.EntidadeNãoEcontradaException;
+import com.quiz.domain.exception.GrupoNaoEncontradoExecption;
 import com.quiz.domain.exception.NegocioException;
 import com.quiz.domain.exception.PermissaoNaoEncontradaException;
 import com.quiz.domain.exception.QuizAlternativaIguaisException;
 import com.quiz.domain.exception.QuizDificuldadeValoresNaoAceitoException;
 import com.quiz.domain.exception.QuizSemRespostaCertaException;
+import com.quiz.domain.exception.UsuarioNaoEncontradoException;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
@@ -120,6 +122,28 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		HttpStatus status = HttpStatus.NOT_FOUND;
 		String detail = e.getMessage();
 		ProblemType problemType = ProblemType.PERMISSAO_NAO_ENCONTRADA;
+		Problem problem = createProblemBuilder(status, problemType, detail).build();		
+		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);		
+	}
+	
+	@ExceptionHandler(GrupoNaoEncontradoExecption.class)
+	public ResponseEntity<?> handlerGrupoNãoEcontradaException(
+			GrupoNaoEncontradoExecption e, WebRequest request){
+		
+		HttpStatus status = HttpStatus.NOT_FOUND;
+		String detail = e.getMessage();
+		ProblemType problemType = ProblemType.GRUPO_NAO_ENCONTRADA;
+		Problem problem = createProblemBuilder(status, problemType, detail).build();		
+		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);		
+	}
+	
+	@ExceptionHandler(UsuarioNaoEncontradoException.class)
+	public ResponseEntity<?> handlerUsuarioNãoEcontradaException(
+			UsuarioNaoEncontradoException e, WebRequest request){
+		
+		HttpStatus status = HttpStatus.NOT_FOUND;
+		String detail = e.getMessage();
+		ProblemType problemType = ProblemType.USUARIO_NAO_ENCONTRADA;
 		Problem problem = createProblemBuilder(status, problemType, detail).build();		
 		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);		
 	}

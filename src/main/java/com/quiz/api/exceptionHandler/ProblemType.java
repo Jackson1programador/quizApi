@@ -15,6 +15,8 @@ public enum ProblemType {
 	CATEGORIA_NAO_ENCONTRADA("/categoria-não-encontrada-no-banco-de-dados", "Categoria não encontrada no banco de dados"),
 	ALTERNATIVA_DA_RESPOSTA_NAO_ENCONTRADA("/alternativa-da-resposta-não-encontrada-no-banco-de-dados", "Alternativa da resposta não encontrada no banco de dados"),
 	ERRO_SINTAXE("/erro-sintaxe", "Erro de sintaxe"),
+	GRUPO_NAO_ENCONTRADA("/grupo-não-encontrada-no-banco-de-dados", "Grupo não encontrada no banco de dados"),
+	USUARIO_NAO_ENCONTRADA("/usuário-não-encontrada-no-banco-de-dados", "Usuário não encontrada no banco de dados"),
 	PERMISSAO_NAO_ENCONTRADA("/permissao-não-encontrada-no-banco-de-dados", "Permissão não encontrada no banco de dados");
 	
 	private String title;

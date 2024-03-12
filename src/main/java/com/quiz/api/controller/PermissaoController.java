@@ -16,11 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quiz.api.assembler.PermissaoModelAssembler;
 import com.quiz.api.assembler.PermissaoModelDesassembler;
-import com.quiz.api.model.CategoriaDTO;
 import com.quiz.api.model.PermissaoDTO;
-import com.quiz.api.model.input.CategoriaInputDTO;
 import com.quiz.api.model.input.PermissaoInputDTO;
-import com.quiz.domain.model.Categoria;
 import com.quiz.domain.model.Permissao;
 import com.quiz.domain.service.CadastroPermissaoService;
 
